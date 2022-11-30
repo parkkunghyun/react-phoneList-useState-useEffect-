@@ -32,11 +32,18 @@ function App() {
     })
     
   }
- 
+  const removeUserHandler = (id) => {
+    console.log(id,'자식에서 클릭한 id')
+    setUsers((preveState)=> {
+      const updateUsers = preveState.filter((user)=> 
+        user.id !== id);
+      return updateUsers
+    })
+  }
   return (
     <div className="App">
       <AddUser onAddUser={addUserHandler} />
-      <ListBox users={users}/>
+      <ListBox onRemoveUser={removeUserHandler} users={users}/>
     </div>
   );
 }

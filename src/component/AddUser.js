@@ -1,4 +1,10 @@
 import React,{useState, useRef} from 'react'
+import Modal from './layout/Modal'
+
+const reducer = (state,action) => {
+  // reducer로 input관리 해보기s
+  
+}
 
 const AddUser = (props) => {
 
@@ -7,7 +13,7 @@ const AddUser = (props) => {
     name: '',
     phone: ''
   })
-
+  const [error, setError] = useState(false)
   let userInfo = ''
   
   if((/\d{3}-\d{3,4}-\d{4}/g).test(inputs.phone)){
@@ -30,13 +36,12 @@ const AddUser = (props) => {
   
 
   const addUser = () => {
-    if (inputs.name === '') {
-      return alert('name이 입력되지 않았습니다')
+    if (inputs.name === '' ||inputs.phone === '') {
+      return setError({
+        title: 'Error',
+        content: '이름과전화번호를 입력하세요'
+      })
     }
-    if (inputs.phone === '') {
-      return alert('phone이 입력되지 않았습니다')
-    }
-
     const person = {
       id: count.current,
       name: inputs.name,
@@ -49,13 +54,22 @@ const AddUser = (props) => {
     setInputs({name:'', phone:''})
     props.onAddUser(person)
   }
+  const onCloseHandler=()=> {
+    setError('')
+  }
 
   return (
-    <div>
+   <>
+      {
+        error && <Modal title={error.title} content={error.content} onClose={onCloseHandler}/>
+      }
+      
+      <div>
         <input type="text" name="name" value={inputs.name} onChange={onChangeh} placeholder='name'/>
         <input type="text" name="phone" value={inputs.phone} onChange={onChangeh} placeholder='phone'/>
         <button onClick={addUser}>추가</button>
     </div>
+   </>
   )
 }
 
